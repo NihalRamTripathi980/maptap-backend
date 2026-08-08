@@ -7,7 +7,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.nihalramtripathi.authservice",
-                "com.nihalramtripathi.commonsecurity"
+                "com.nihalramtripathi.commonsecurity",
+                "com.nihalramtripathi.commoncore",
         }
 )
 @EnableFeignClients

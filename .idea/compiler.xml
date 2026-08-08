@@ -13,6 +13,7 @@
         <module name="api-gateway" />
         <module name="user-service" />
         <module name="service-registry" />
+        <module name="common-core" />
       </profile>
     </annotationProcessing>
   </component>
@@ -21,6 +22,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="borrow-service" options="-parameters" />
+      <module name="common-core" options="-parameters" />
       <module name="common-security" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="service-registry" options="-parameters" />

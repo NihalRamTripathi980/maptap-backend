@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(
         scanBasePackages ={
                 "com.nihalramtripathi.apigateway",
-                "com.nihalramtripathi.commonsecurity",
                 "com.nihalramtripathi.commoncore",
         }
 )

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         scanBasePackages = {
                 "com.nihalramtripathi.userservice",
                 "com.nihalramtripathi.commonsecurity",
-                "com.nihalramtripathi.commoncore",
+                "com.nihalramtripathi.commoncore"
         }
 )
 public class UserServiceApplication {

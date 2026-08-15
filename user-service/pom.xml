@@ -109,7 +109,6 @@
         <dependency>
             <groupId>com.nihalramtripathi</groupId>
             <artifactId>common-security</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>

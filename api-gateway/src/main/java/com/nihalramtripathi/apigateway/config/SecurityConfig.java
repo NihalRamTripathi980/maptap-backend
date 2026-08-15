@@ -1,67 +1,59 @@
 package com.nihalramtripathi.apigateway.config;
 
-import com.nihalramtripathi.commonsecurity.exception.JwtAuthenticationEntryPoint;
-import com.nihalramtripathi.commonsecurity.filter.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
-@RequiredArgsConstructor
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
 
-        http
-                // Disable CSRF because this is a stateless REST API
-                .csrf(csrf -> csrf.disable())
+        return http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
 
-                // No HTTP session
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS
-                        )
-                )
-
-                // Handle authentication failures
-                .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(
-                                jwtAuthenticationEntryPoint
-                        )
-                )
-
-                .authorizeHttpRequests(auth -> auth
-
-                        // Public endpoints
-                        .requestMatchers(
+                .authorizeExchange(exchange -> exchange
+                        .pathMatchers(
                                 "/auth/register",
                                 "/auth/login",
                                 "/auth/refresh"
                         ).permitAll()
-
-                        // Actuator
-                        .requestMatchers(
-                                "/actuator/**"
-                        ).permitAll()
-
-                        // Everything else requires JWT
-                        .anyRequest().authenticated()
+                        .anyExchange().authenticated()
                 )
 
-                // Your common-security JWT filter
-                .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt -> {})
+                )
 
-        return http.build();
+                .build();
+    }
+
+    @Bean
+    public ReactiveJwtDecoder jwtDecoder(
+            @Value("${jwt.secret}") String secret) {
+
+        SecretKey key = new SecretKeySpec(
+                secret.getBytes(StandardCharsets.UTF_8),
+                "HmacSHA256"
+        );
+
+        return NimbusReactiveJwtDecoder
+                .withSecretKey(key)
+                .macAlgorithm(MacAlgorithm.HS256)
+                .build();
     }
 }

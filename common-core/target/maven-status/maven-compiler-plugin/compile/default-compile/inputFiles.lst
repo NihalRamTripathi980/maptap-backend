@@ -1,2 +1,6 @@
 /Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/Main.java
 /Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/dto/ApiResponse.java
+/Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/dto/request/CommonRequestDTO.java
+/Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/dto/response/CommonResponseDTO.java
+/Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/dto/response/UserDetailsResponseDTO.java
+/Users/nihalramtripathi/Spring/map-tap-backend/common-core/src/main/java/com/nihalramtripathi/commoncore/dto/response/UserLookupResponseDTO.java

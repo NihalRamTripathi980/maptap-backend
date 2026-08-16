@@ -1,10 +1,13 @@
 package com.nihalramtripathi.userservice.service;
 
 
-import com.nihalramtripathi.userservice.dto.UserRegistrationDTO;
-import org.springframework.stereotype.Service;
+import com.nihalramtripathi.commoncore.dto.request.CommonRequestDTO;
+import com.nihalramtripathi.commoncore.dto.response.UserLookupResponseDTO;
+import com.nihalramtripathi.userservice.dto.UserRegistrationRequestDTO;
+import com.nihalramtripathi.userservice.dto.UserResponseDTO;
 
 
 public interface UserService {
-     void  register(UserRegistrationDTO registrationDTO);
+     UserResponseDTO register(UserRegistrationRequestDTO registrationDTO);
+     UserLookupResponseDTO checkUserLogin(CommonRequestDTO commonRequestDTO);
 }

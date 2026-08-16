@@ -33,6 +33,8 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/auth/register",
+                                "/auth/user/register",
+                                "/auth/checkUserLogin",
                                 "/auth/login",
                                 "/auth/token",
                                 "/auth/set-passcode",

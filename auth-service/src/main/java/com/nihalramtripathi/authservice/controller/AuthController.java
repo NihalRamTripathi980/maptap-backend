@@ -4,7 +4,11 @@ import com.nihalramtripathi.authservice.dto.request.LoginRequestDTO;
 import com.nihalramtripathi.authservice.dto.request.RegisterRequestDTO;
 import com.nihalramtripathi.authservice.dto.request.SetPasscodeRequestDTO;
 import com.nihalramtripathi.authservice.dto.response.AuthResponseDTO;
+import com.nihalramtripathi.authservice.dto.response.MobileCheckResponseDTO;
 import com.nihalramtripathi.authservice.service.AuthService;
+import com.nihalramtripathi.commoncore.dto.ApiResponse;
+import com.nihalramtripathi.commoncore.dto.request.CommonRequestDTO;
+import com.nihalramtripathi.commoncore.dto.response.UserDetailsResponseDTO;
 import com.nihalramtripathi.commonsecurity.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -29,13 +33,25 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(
+    @PostMapping("/checkUserLogin")
+    public ResponseEntity<ApiResponse<MobileCheckResponseDTO>> checkUserLogin(@RequestBody CommonRequestDTO requestDTO) {
+
+        MobileCheckResponseDTO responseDTO = authService.checkUserLogin(requestDTO);
+
+        ApiResponse<MobileCheckResponseDTO> apiResponse = ApiResponse.success("Success",responseDTO);
+        return ResponseEntity.ok(apiResponse) ;
+    }
+
+    @PostMapping("/user/register")
+    public ResponseEntity<ApiResponse<UserDetailsResponseDTO>> register(
             @Valid @RequestBody RegisterRequestDTO request) {
 
-        authService.register(request);
+        UserDetailsResponseDTO response =  authService.register(request);
 
-        return ResponseEntity.ok("User Registered Successfully");
+        ApiResponse<UserDetailsResponseDTO> apiResponse = ApiResponse.success( "User Registered Successfully",
+                response);
+
+        return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("/set-passcode")
@@ -51,5 +67,8 @@ public class AuthController {
 
         return ResponseEntity.ok(authService.login(request));
     }
+
+
+
 
 }

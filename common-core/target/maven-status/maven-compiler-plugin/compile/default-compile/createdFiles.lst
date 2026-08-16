@@ -1,3 +1,10 @@
-com/nihalramtripathi/commoncore/dto/ApiResponse$ApiResponseBuilder.class
-com/nihalramtripathi/commoncore/dto/ApiResponse.class
+com/nihalramtripathi/commoncore/dto/response/CommonResponseDTO$CommonResponseDTOBuilder.class
+com/nihalramtripathi/commoncore/dto/response/UserLookupResponseDTO$UserLookupResponseDTOBuilder.class
+com/nihalramtripathi/commoncore/dto/response/UserLookupResponseDTO.class
+com/nihalramtripathi/commoncore/dto/response/UserDetailsResponseDTO.class
 com/nihalramtripathi/commoncore/Main.class
+com/nihalramtripathi/commoncore/dto/response/CommonResponseDTO.class
+com/nihalramtripathi/commoncore/dto/ApiResponse$ApiResponseBuilder.class
+com/nihalramtripathi/commoncore/dto/request/CommonRequestDTO.class
+com/nihalramtripathi/commoncore/dto/ApiResponse.class
+com/nihalramtripathi/commoncore/dto/response/UserDetailsResponseDTO$UserDetailsResponseDTOBuilder.class

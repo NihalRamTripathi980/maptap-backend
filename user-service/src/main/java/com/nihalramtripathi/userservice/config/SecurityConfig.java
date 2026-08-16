@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(
-                                "/actuator/**"
+                                "/actuator/**",
+                                "/internal/users/register",
+                                "/internal/users/checkUserLogin"
                         ).permitAll()
 
                         .anyRequest().authenticated())

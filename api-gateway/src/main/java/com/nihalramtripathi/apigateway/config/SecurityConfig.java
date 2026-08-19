@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 "/auth/user/register",
                                 "/auth/login",
                                 "/auth/refresh",
-                                "/auth/checkUserLogin"
+                                "/auth/checkUserLogin",
+                                "/auth/verify-otp"
 
                         ).permitAll()
                         .anyExchange().authenticated()

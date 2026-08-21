@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -91,11 +92,16 @@ public class AuthServiceImpl implements AuthService {
                     .build();
         }
 
-
-        if (!passwordEncoder.matches(request.getOtp(), otpMaster.getOtpHash())) {
+//        if (!passwordEncoder.matches(request.getOtp(), otpMaster.getOtpHash())) {
+//            return VerifyOtpResponseDTO.builder()
+//                    .status(false)
+//                    .message("Invalid OTP")
+//                    .build();
+//        }
+        if(!Objects.equals(otpMaster.getOtpHash(), request.getOtp())){
             return VerifyOtpResponseDTO.builder()
-                    .status(false)
-                    .message("Invalid OTP")
+                  .status(false)
+                   .message("Invalid OTP")
                     .build();
         }
 

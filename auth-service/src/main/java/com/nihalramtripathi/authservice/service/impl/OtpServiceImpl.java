@@ -28,12 +28,13 @@ public class OtpServiceImpl implements OtpService {
         );
 
         // 2. Hash OTP before storing
-        String otpHash = passwordEncoder.encode(otp);
+      //  String otpHash = passwordEncoder.encode(otp);
 
         // 3. Create entity
         OtpMasterEntity otpMaster = OtpMasterEntity.builder()
                 .mobileNumber(mobileNumber)
-                .otpHash(otpHash)
+              //  .otpHash(otpHash)
+                .otpHash(otp)
                 .expiresAt(LocalDateTime.now().plusMinutes(5))
                 .verified(false)
                 .attemptCount(0)

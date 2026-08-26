@@ -10,4 +10,6 @@ import com.nihalramtripathi.userservice.dto.UserResponseDTO;
 public interface UserService {
      UserResponseDTO register(UserRegistrationRequestDTO registrationDTO);
      UserLookupResponseDTO checkUserLogin(CommonRequestDTO commonRequestDTO);
+
+     UserResponseDTO createUser(CommonRequestDTO commonRequestDTO);
 }

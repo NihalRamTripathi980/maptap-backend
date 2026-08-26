@@ -1,5 +1,6 @@
 package com.nihalramtripathi.authservice.client;
 
+import com.nihalramtripathi.authservice.config.feign.CustomFeignClientConfiguration;
 import com.nihalramtripathi.authservice.dto.request.RegisterRequestDTO;
 import com.nihalramtripathi.commoncore.dto.request.CommonRequestDTO;
 import com.nihalramtripathi.commoncore.dto.response.UserDetailsResponseDTO;
@@ -8,7 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "user-service")
+@FeignClient(name = "user-service",configuration = CustomFeignClientConfiguration.class)
 public interface UserClient {
 
     @PostMapping("/internal/users/register")
@@ -16,4 +17,7 @@ public interface UserClient {
 
     @PostMapping("/internal/users/checkUserLogin")
     UserLookupResponseDTO checkUserLogin(@RequestBody CommonRequestDTO request);
+
+    @PostMapping("/internal/users/createUser")
+    UserDetailsResponseDTO createNewUser(@RequestBody CommonRequestDTO request);
 }

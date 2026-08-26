@@ -34,7 +34,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/actuator/**",
                                 "/internal/users/register",
-                                "/internal/users/checkUserLogin"
+                                "/internal/users/checkUserLogin",
+                                "/internal/users/createUser"
+                                //"/internal/**"
                         ).permitAll()
 
                         .anyRequest().authenticated())

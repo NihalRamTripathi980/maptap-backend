@@ -24,21 +24,21 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(name = "mobile_number", nullable = false, length = 15)
     private String mobileNumber;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String email;
 
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Column(name = "full_name", length = 100)
     private String fullName;
 
     @Column(name = "father_name", length = 100)
     private String fatherName;
 
-    @Column(name = "is_salaried", nullable = false)
+    @Column(name = "is_salaried")
     private Boolean salaried;
 
     @Column(nullable = false)

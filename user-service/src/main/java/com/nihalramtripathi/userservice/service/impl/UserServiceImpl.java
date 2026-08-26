@@ -10,12 +10,14 @@ import com.nihalramtripathi.userservice.repository.UserRepository;
 import com.nihalramtripathi.userservice.repository.UserRoleRepository;
 import com.nihalramtripathi.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity.isPresent()) {
             return UserLookupResponseDTO.builder()
                     .exists(true)
-                    .userId(userEntity.get().getId())
+                    .userId(userEntity.get().getUserId())
                     .userName(userEntity.get().getFullName())
                     .build();
         }
@@ -43,6 +45,21 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+
+    @Override
+    public UserResponseDTO createUser(CommonRequestDTO commonRequestDTO) {
+        log.info("createUser started for mobileNumber={}",
+                commonRequestDTO.getMobileNumber());
+        UserEntity userEntity = UserEntity.builder()
+                .mobileNumber(commonRequestDTO.getMobileNumber())
+                .build();
+
+        UserEntity user = userRepository.save(userEntity);
+        return UserResponseDTO.builder()
+                .userId(user.getUserId())
+                .mobileNumber(user.getMobileNumber())
+                .build();
+    }
 
     @Override
     public UserResponseDTO register(UserRegistrationRequestDTO request) {
@@ -75,7 +92,7 @@ public class UserServiceImpl implements UserService {
         UserEntity savedUser = userRepository.save(user);
 
         return UserResponseDTO.builder()
-                .id(savedUser.getId())
+                .userId(savedUser.getUserId())
                 .mobileNumber(savedUser.getMobileNumber())
                 .email(savedUser.getEmail())
                 .fullName(savedUser.getFullName())

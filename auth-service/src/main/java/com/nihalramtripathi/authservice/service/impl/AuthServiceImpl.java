@@ -16,6 +16,7 @@ import com.nihalramtripathi.commoncore.dto.request.CommonRequestDTO;
 import com.nihalramtripathi.commoncore.dto.response.UserDetailsResponseDTO;
 import com.nihalramtripathi.commoncore.dto.response.UserLookupResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -107,9 +109,22 @@ public class AuthServiceImpl implements AuthService {
 
         otpMaster.setVerified(true);
         otpMasterRepository.save(otpMaster);
+        CommonRequestDTO commonRequestDTO = CommonRequestDTO
+                .builder()
+                .mobileNumber(request.getMobileNumber())
+                .build();
+        log.info("OTP verified successfully: otpId={}, mobileNumber={}",
+                request.getOtp(),
+                request.getMobileNumber());
 
+        // Create user
+        log.info("Calling User Service to create user: mobileNumber={}",
+                request.getMobileNumber());
+
+        UserDetailsResponseDTO userDetailsResponseDTO =  userClient.createNewUser(commonRequestDTO);
         return VerifyOtpResponseDTO.builder()
                 .status(true)
+                .userDetails(userDetailsResponseDTO)
                 .message("OTP verified successfully")
                 .build();
     }

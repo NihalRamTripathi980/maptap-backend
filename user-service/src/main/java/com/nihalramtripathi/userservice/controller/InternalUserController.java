@@ -23,6 +23,11 @@ public class InternalUserController {
         return userService.checkUserLogin(request);
     }
 
+    @PostMapping("/createUser")
+    UserResponseDTO createNewUser(@RequestBody CommonRequestDTO request) {
+        return userService.createUser(request);
+    }
+
     @PostMapping("/register")
     public UserResponseDTO userRegistration(@RequestBody UserRegistrationRequestDTO userRegistrationRequestDTO) {
         return userService.register(userRegistrationRequestDTO);

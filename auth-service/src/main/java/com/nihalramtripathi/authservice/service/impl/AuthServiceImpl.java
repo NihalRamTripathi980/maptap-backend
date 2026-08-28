@@ -15,6 +15,7 @@ import com.nihalramtripathi.authservice.service.OtpService;
 import com.nihalramtripathi.commoncore.dto.request.CommonRequestDTO;
 import com.nihalramtripathi.commoncore.dto.response.UserDetailsResponseDTO;
 import com.nihalramtripathi.commoncore.dto.response.UserLookupResponseDTO;
+import com.nihalramtripathi.commonsecurity.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final OtpService otpService;
+    private final JwtService jwtService;
 
 
     @Override
@@ -122,9 +124,25 @@ public class AuthServiceImpl implements AuthService {
                 request.getMobileNumber());
 
         UserDetailsResponseDTO userDetailsResponseDTO =  userClient.createNewUser(commonRequestDTO);
+
+        // Generate JWT
+        String accessToken = jwtService.generateToken(
+                userDetailsResponseDTO.getUserId(),
+                userDetailsResponseDTO.getMobileNumber()
+        );
+
+        AuthResponseDTO authResponseDTO = AuthResponseDTO.builder()
+                .userId(userDetailsResponseDTO.getUserId())
+                .mobileNumber(userDetailsResponseDTO.getMobileNumber())
+                .accessToken(accessToken)
+                .tokenType("Bearer")
+                .expiresIn(3600L)
+                .build();
+
         return VerifyOtpResponseDTO.builder()
                 .status(true)
-                .userDetails(userDetailsResponseDTO)
+                .authResponse(
+                        authResponseDTO)
                 .message("OTP verified successfully")
                 .build();
     }

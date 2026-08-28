@@ -10,9 +10,13 @@ import lombok.*;
 @Builder
 public class AuthResponseDTO {
 
+
+    private Long userId;
+    private String mobileNumber;
     private String accessToken;
 
     private String tokenType;
+    private long expiresIn;
 
-    private Long userId;
+
 }

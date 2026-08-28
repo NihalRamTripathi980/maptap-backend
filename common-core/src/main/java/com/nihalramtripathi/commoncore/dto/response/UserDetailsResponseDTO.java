@@ -19,6 +19,7 @@ public class UserDetailsResponseDTO  {
     private String fullName;
 
     private Boolean salaried;
+    private String userStatus;
 
 }
 

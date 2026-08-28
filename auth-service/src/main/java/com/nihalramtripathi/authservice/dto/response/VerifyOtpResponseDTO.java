@@ -12,6 +12,5 @@ public class VerifyOtpResponseDTO {
 
     private String message;
     private Boolean status;
-    private String accessToken;
-    private UserDetailsResponseDTO userDetails;
+    private AuthResponseDTO authResponse;
 }

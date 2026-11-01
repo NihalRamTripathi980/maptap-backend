@@ -11,6 +11,8 @@ import lombok.*;
 @Builder
 public class LoginRequestDTO {
 
+    private Long userId;
+
     @NotBlank
     private String mobileNumber;
 

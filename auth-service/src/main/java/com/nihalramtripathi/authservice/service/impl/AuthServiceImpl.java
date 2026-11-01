@@ -8,7 +8,9 @@ import com.nihalramtripathi.authservice.dto.request.VerifyOtpRequestDTO;
 import com.nihalramtripathi.authservice.dto.response.AuthResponseDTO;
 import com.nihalramtripathi.authservice.dto.response.MobileCheckResponseDTO;
 import com.nihalramtripathi.authservice.dto.response.VerifyOtpResponseDTO;
+import com.nihalramtripathi.authservice.entity.AuthCredentialsEntity;
 import com.nihalramtripathi.authservice.entity.OtpMasterEntity;
+import com.nihalramtripathi.authservice.repo.AuthCredentialsRepository;
 import com.nihalramtripathi.authservice.repo.OtpMasterRepository;
 import com.nihalramtripathi.authservice.service.AuthService;
 import com.nihalramtripathi.authservice.service.OtpService;
@@ -18,6 +20,7 @@ import com.nihalramtripathi.commoncore.dto.response.UserLookupResponseDTO;
 import com.nihalramtripathi.commonsecurity.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserClient userClient;
 
     private final OtpMasterRepository otpMasterRepository;
+
+    private final AuthCredentialsRepository authCredentialsRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final OtpService otpService;
@@ -154,12 +159,41 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponseDTO setPasscode(SetPasscodeRequestDTO request) {
-        return null;
+    public void setPasscode(SetPasscodeRequestDTO request) {
+        String hashedPasscode = passwordEncoder.encode(request.getPasscode());
+        AuthCredentialsEntity authCredentialsEntity = AuthCredentialsEntity.builder()
+                .userId(request.getUserId())
+                .passCodeHash(hashedPasscode)
+                .build();
+
+        authCredentialsRepository.save(authCredentialsEntity);
     }
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO request) {
-        return null;
+        AuthCredentialsEntity authCredentials = authCredentialsRepository.findByUserId(request.getUserId()).orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(
+                request.getPasscode(),
+                authCredentials.getPassCodeHash())) {
+
+            throw new BadCredentialsException("Invalid credentials");
+        }
+
+        // Generate JWT
+        String accessToken = jwtService.generateToken(
+                request.getUserId(),
+                request.getMobileNumber()
+        );
+
+
+        return AuthResponseDTO.builder()
+                .userId(request.getUserId())
+                .mobileNumber(request.getMobileNumber())
+                .accessToken(accessToken)
+                .tokenType("Bearer")
+                .expiresIn(3600L)
+                .build();
+
     }
 }

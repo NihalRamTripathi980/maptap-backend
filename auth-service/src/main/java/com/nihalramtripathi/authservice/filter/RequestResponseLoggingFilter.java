@@ -5,13 +5,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -19,12 +19,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
@@ -44,7 +44,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         try {
 
             log.info(
-                    "Before  doFilter auth-service"
+                    "Before  doFilter auth-service :{}", wrappedResponse.getContentAsByteArray()
             );
 
             // =========================

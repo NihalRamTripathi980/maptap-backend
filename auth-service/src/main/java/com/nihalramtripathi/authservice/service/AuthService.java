@@ -19,7 +19,7 @@ public interface AuthService {
 
     UserDetailsResponseDTO register(RegisterRequestDTO request);
 
-    AuthResponseDTO setPasscode(SetPasscodeRequestDTO request);
+    void setPasscode(SetPasscodeRequestDTO request);
 
     AuthResponseDTO login(LoginRequestDTO request);
 

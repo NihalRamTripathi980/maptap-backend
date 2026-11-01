@@ -69,17 +69,27 @@ public class AuthController {
     }
 
     @PostMapping("/set-passcode")
-    public ResponseEntity<AuthResponseDTO> setPasscode(
+    public ResponseEntity<ApiResponse<Void>> setPasscode(
             @Valid @RequestBody SetPasscodeRequestDTO request) {
 
-        return ResponseEntity.ok(authService.setPasscode(request));
+        authService.setPasscode(request);
+
+        ApiResponse<Void> response =
+                ApiResponse.success("Passcode set successfully", null);
+
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(
-            @Valid @RequestBody LoginRequestDTO request) {
 
-        return ResponseEntity.ok(authService.login(request));
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> login(
+            @Valid @RequestBody LoginRequestDTO request) {
+        AuthResponseDTO authResponseDTO = authService.login(request);
+
+        ApiResponse<AuthResponseDTO> apiResponse = ApiResponse.success("User Login Successfully", authResponseDTO);
+
+
+        return ResponseEntity.ok(apiResponse);
     }
 
 

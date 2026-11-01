@@ -84,6 +84,18 @@
 <!--            <artifactId>common-core</artifactId>-->
 <!--        </dependency>-->
 
+        <!-- Kafka producer/consumer support -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Reactive Kafka publishing -->
+        <dependency>
+            <groupId>io.projectreactor.kafka</groupId>
+            <artifactId>reactor-kafka</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

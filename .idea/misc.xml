@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/borrow-service/pom.xml" />
         <option value="$PROJECT_DIR$/common-security/pom.xml" />
         <option value="$PROJECT_DIR$/common-core/pom.xml" />
+        <option value="$PROJECT_DIR$/logging-service/pom.xml" />
       </list>
     </option>
   </component>

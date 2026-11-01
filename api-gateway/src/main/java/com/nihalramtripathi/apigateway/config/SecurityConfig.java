@@ -56,7 +56,7 @@ public class SecurityConfig {
 
         return NimbusReactiveJwtDecoder
                 .withSecretKey(key)
-                .macAlgorithm(MacAlgorithm.HS256)
+                .macAlgorithm(MacAlgorithm.HS512)
                 .build();
     }
 }

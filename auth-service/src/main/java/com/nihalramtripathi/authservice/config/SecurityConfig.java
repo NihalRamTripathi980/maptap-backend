@@ -40,7 +40,6 @@ public class SecurityConfig {
                                 "/auth/verify-otp",
                                 "/auth/login",
                                 "/auth/token",
-                                "/auth/set-passcode",
                                 "/actuator/**"
                         ).permitAll()
 

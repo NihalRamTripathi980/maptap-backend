@@ -34,6 +34,7 @@
 <!--        <module>notification-service</module>-->
         <module>common-security</module>
         <module>common-core</module>
+        <module>logging-service</module>
     </modules>
 
     <!-- Common Versions -->

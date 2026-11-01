@@ -1,34 +1,47 @@
 package com.nihalramtripathi.commonsecurity.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nihalramtripathi.commoncore.dto.response.ExceptionResponseDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+@RequiredArgsConstructor
+public class JwtAuthenticationEntryPoint
+        implements AuthenticationEntryPoint {
+
+    private final ObjectMapper objectMapper;
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException)
-            throws IOException, ServletException {
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException)
+            throws IOException ,ServletException {
+
+        ExceptionResponseDTO errorResponse =
+                ExceptionResponseDTO.builder()
+                        .code("UNAUTHORIZED")
+                        .message("Authentication required")
+                        .status(HttpServletResponse.SC_UNAUTHORIZED)
+                        .path(request.getRequestURI())
+                        .timestamp(LocalDateTime.now())
+                        .build();
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", 401);
-        body.put("message", "Unauthorized");
-        body.put("path", request.getServletPath());
-
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        objectMapper.writeValue(
+                response.getOutputStream(),
+                errorResponse
+        );
     }
 }

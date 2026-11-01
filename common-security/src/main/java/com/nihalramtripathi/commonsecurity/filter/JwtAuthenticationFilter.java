@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,18 +19,21 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        // No JWT → let Spring Security decide
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -37,22 +41,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = header.substring(7);
 
-        if (jwtService.isTokenValid(token)) {
+        try {
+
+            if (!jwtService.isTokenValid(token)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             String mobile = jwtService.extractMobile(token);
-
             Long userId = jwtService.extractUserId(token);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             mobile,
                             null,
-                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                            List.of(
+                                    new SimpleGrantedAuthority("ROLE_USER")
+                            )
                     );
 
             authentication.setDetails(userId);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(authentication);
+
+        } catch (Exception e) {
+
+            log.warn(
+                    "JWT authentication failed | path={} | reason={}",
+                    request.getRequestURI(),
+                    e.getMessage()
+            );
+
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);

@@ -7,6 +7,7 @@ import com.nihalramtripathi.loggingservice.service.ApiLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -21,12 +22,10 @@ public class LoggingKafkaListener {
             topics = "${app.kafka.logging.topic}",
             groupId = "${spring.kafka.consumer.group-id}"
     )
-    public void consume(String message) {
+    public void consume(String message,  Acknowledgment acknowledgment) {
 
         try {
            // JsonNode logEvent = objectMapper.readTree(message);
-
-
             ApiLogRequestDTO event = objectMapper.readValue(
                     message,
                     ApiLogRequestDTO.class
@@ -34,6 +33,8 @@ public class LoggingKafkaListener {
 
             log.info("Received API log event from Kafka");
             apiLogService.saveLog(event);
+            acknowledgment.acknowledge();
+
 
         } catch (Exception exception) {
             log.error("Failed to process API log message", exception);
